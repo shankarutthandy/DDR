@@ -1,0 +1,240 @@
+<?xml version='1.0'?>
+<robot name="robot">
+<!-- 
+
+BASE_LINK OF THE ROBOT
+
+-->
+<link name="base_link">
+  <visual>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+     <geometry>
+     <box size="0.5 0.5 0.175"/>
+     </geometry>                               
+  </visual>
+  <collision>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+    <box size="0.5 0.5 0.175"/>
+    </geometry>
+  </collision>
+  <inertial>
+    <mass value="1"/>
+    <inertia ixx="0.1" ixy="0" ixz="0" iyx="0" iyy="0.13" iyz="0" izx="0" izy="0" izz="0.23" />
+  </inertial>
+</link>
+<!--
+ 
+CASTOR_LINK
+
+-->
+<link name="castor_link">
+  <visual>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+    <sphere radius="0.10" />
+    </geometry>
+  </visual>
+  <collision>
+  <origin xyz="0 0 0" rpy="0 0 0"/>
+  <geometry>
+    <sphere radius="0.10" />
+  </geometry>
+  </collision>
+  <inertial>
+    <mass value="0.0005"/>
+    <inertia ixx="0.001" ixy="0" ixz="0" iyx="0" iyy="0.001" iyz="0" izx="0" izy="0" izz="0.001" />
+  </inertial>
+</link>
+<!--
+
+JOINT CASTOR_LINK TO BASE_LINK
+
+-->
+<joint name="castor_joint" type="fixed">
+  <parent link="base_link" />
+  <child link="castor_link" />
+  <origin xyz="0.15 0 -0.10" rpy="0 0 0" />
+</joint>
+<!--
+
+SENSOR_LINK OF THE RAY TYPE SENSOR[GAZEBO PLUGIN DESCRIBED AT LAST]
+
+-->
+<link name="sensor_link">
+  <visual>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <box size="0.1 0.05 0.05" />
+    </geometry>
+  </visual>
+  <collision>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+       <box size="0.1 0.1 0.1" />
+    </geometry>
+  </collision>
+<inertial>
+  <mass value="0.001"/>
+  <inertia ixx="0.001" ixy="0" ixz="0" iyx="0" iyy="0.001" iyz="0" izz="0.001"/>
+</inertial>
+</link>
+<!--
+
+JOINT SENSOR_LINK TO BASE_LINK
+
+-->
+<joint name="sensor_joint" type="fixed">
+  <parent link="base_link"/>
+  <child link="sensor_link"/>
+  <origin xyz="0.25 0 0" rpy="0 0 0"/>
+</joint>
+<!--
+
+RIGHT_WHEEL AS A CYLINDRICAL LINK
+
+-->
+<link name="right_wheel">
+  <visual>
+     <origin xyz="0 0 0" rpy="1.570795 0 0"/>
+     <geometry>
+        <cylinder length="0.05" radius="0.15"/>
+     </geometry>
+     </visual>
+     <collision>
+       <origin xyz="0 0 0" rpy="1.570795 0 0"/>
+       <geometry>
+         <cylinder length="0.1" radius="0.2"/>
+       </geometry>
+     </collision>
+     <inertial>
+         <mass value="1"/>
+         <inertia ixx="0.01" ixy="0" ixz="0" iyx="0" iyy="0.01" iyz="0" izz="0.02" />
+     </inertial>
+</link>
+<!--
+
+JOINT RIGHT_WHEEL TO BASE_LINK
+
+-->
+<joint name="joint_right" type="continuous">
+  <parent link="base_link"/>
+  <child link="right_wheel"/>
+  <origin xyz="0 -0.3 0" rpy="0 0 0"/>
+  <axis xyz="0 1 0"/>
+</joint>
+<!--
+
+LEFT_WHEEL AS A CYLINDRICAL LINK
+
+-->
+<link name="left_wheel">
+  <visual>
+    <origin xyz="0 0 0" rpy="1.570795 0 0"/>
+    <geometry>
+      <cylinder length="0.05" radius="0.15"/>
+    </geometry>
+  </visual>
+  <collision>
+      <origin xyz="0 0 0" rpy="1.570795 0 0"/>
+      <geometry>
+         <cylinder length="0.1" radius="0.2"/>
+      </geometry>
+  </collision>
+  <inertial>
+     <mass value="1"/>
+     <inertia ixx="0.01" ixy="0" ixz="0" iyx="0" iyy="0.01" iyz="0" izz="0.02" />
+</inertial>
+</link>
+<!--
+  
+JOINT LEFT_WHEEL TO BASE_LINK
+
+-->
+<joint name="joint_left" type="continuous">
+  <parent link="base_link"/>
+  <child link="left_wheel"/>
+  <origin xyz="0 0.3 0" rpy="0 0 0"/>
+  <axis xyz="0 1 0"/>
+</joint>
+<!--
+
+GAZEBO REFERENCE FOR LINKS
+
+-->
+<gazebo reference="base_link">
+  <material>Gazebo/Orange</material>
+</gazebo>
+<gazebo reference="castor_link1">
+  <material>Gazebo/Orange</material>
+</gazebo>
+<gazebo reference="castor_link2">
+  <material>Gazebo/Orange</material>
+</gazebo>
+<gazebo reference="sensor_link">
+  <material>Gazebo/Blue</material>
+</gazebo>
+<gazebo reference="right_wheel">
+  <material>Gazebo/White</material>
+</gazebo>
+<gazebo reference="left_wheel">
+  <material>Gazebo/White</material>
+</gazebo>
+<!--
+
+DIFFERENTIAL DRIVE CONTROLLER PLUGIN
+
+-->
+<gazebo>
+   <plugin filename="libgazebo_ros_diff_drive.so"   name="differential_drive_controller" >
+      <alwaysOn>true</alwaysOn>
+	    <updateRate>50</updateRate>
+	    <leftJoint>joint_left</leftJoint>
+      <rightJoint>joint_right</rightJoint>
+	    <wheelSeperation>0.6</wheelSeperation>
+	    <wheelDiameter>0.2</wheelDiameter>
+	    <torque>10</torque>
+	    <commandTopic>cmd_vel</commandTopic>
+	    <odometryTopic>odom</odometryTopic>
+	    <odometryFrame>odom</odometryFrame>
+	    <robotBaseFrame>base_link</robotBaseFrame>
+	    <odometrySource>WORLD</odometrySource>
+  </plugin>
+</gazebo> 
+<!--
+
+ROS LASER PLUGIN | RAY TYPE SENSOR 
+
+-->
+<gazebo reference="sensor_link" >
+   <sensor type="ray" name="sensor">
+        <pose> 0.25 0 0 0 0 0 </pose>
+	      <visualize>false</visualize>
+	      <update_rate>20</update_rate>
+	      <ray>
+	       <scan>
+	         <horizontal>
+		         <samples>720</samples>
+		         <resolution>1</resolution>
+		         <min_angle>-1.570796</min_angle>
+		         <max_angle>1.570796</max_angle>
+	         </horizontal>
+         </scan>
+	  <range>
+	      <min>0.10</min>
+	      <max>15.0</max>
+	      <resolution>0.01</resolution>
+ 	  </range>
+	  <noise>
+	     <type>gaussian</type>
+    	 <mean>0.0</mean>
+	     <stddev>0.01</stddev>
+	  </noise>
+       </ray>
+    <plugin name="lser" filename="libgazebo_ros_laser.so">
+	    <topicName>/ddr/laser/scan</topicName>
+	    <frameName>sensor_link</frameName>
+    </plugin>
+  </sensor>
+</gazebo>
+</robot>
