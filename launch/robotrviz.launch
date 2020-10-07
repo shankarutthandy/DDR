@@ -2,7 +2,7 @@
  <arg name="model" />
  <arg name="gui" default="false" />
 
- <param name="robot_description" textfile="$(find ddr)/urdf/$(arg model)" />
+ <param name="robot_description" textfile="$(find DDR )/urdf/$(arg model)" />
 
  <param name="use_gui" value="$(arg gui)" />
  

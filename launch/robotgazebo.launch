@@ -1,7 +1,7 @@
 <launch>
 <include file="$(find gazebo_ros)/launch/empty_world.launch" >
 
-<arg name="world_name" value="$(find ddr)/worlds/myrobo.world" />
+<arg name="world_name" value="$(find DDR)/worlds/myrobo.world" />
 <arg name="paused" default="false"/>
 <arg name="use_sim_time" default="true" />
 <arg name="gui" default="true" />
@@ -10,7 +10,7 @@
 </include>
 
 <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" output="screen"
-  args="-file $(find ddr)/urdf/robot.gazebo -urdf -model ddrobot" />
+  args="-file $(find DDR)/urdf/robot.gazebo -urdf -model ddrobot" />
 
 
 </launch>

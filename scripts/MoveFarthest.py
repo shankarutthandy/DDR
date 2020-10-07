@@ -27,7 +27,7 @@ def laser_clbk(msg):
    dist.append(msg.ranges[360])
 def odom_clbk(msg):
 #CALL BACK FUNCTION FOR ODOMETRY SUBSCRIBER
-   global theta
+   global theta,ax1,cur_time
    orientation_q = msg.pose.pose.orientation
    orientation_list = [orientation_q.x, orientation_q.y, orientation_q.z, orientation_q.w]
    (roll, pitch, theta) = euler_from_quaternion (orientation_list)
