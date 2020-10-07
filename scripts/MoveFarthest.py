@@ -6,6 +6,7 @@ from nav_msgs.msg import Odometry
 from tf.transformations import euler_from_quaternion 
 import math
 from time import *
+from DDR.msg import err
 pub=None
 rate=0
 dist=[]
@@ -14,6 +15,7 @@ set_ang=0
 ierr_ang=0
 derr_ang=0
 prev_err_ang=0
+pub2=None
 def _dist():
 #TO SET INF TO 0 AND GET THE MAX DIST
    global dist
@@ -33,14 +35,18 @@ def odom_clbk(msg):
    (roll, pitch, theta) = euler_from_quaternion (orientation_list)
 def line_control():
 #A PID CONTROLLER FOR LINE CONTROL [ Kp=10 | Ki=1e-5 | Kd=1000 ]
-   global theta,set_ang,ierr_ang,derr_ang,rate,prev_err_ang
+   global theta,set_ang,ierr_ang,derr_ang,rate,prev_err_ang,pub2
    v=Twist()
    v.linear.x=0
    err_ang=set_ang-theta
    ierr_ang+=err_ang
    derr_ang=err_ang-prev_err_ang
+   t=err()
+   t.x=float(err_ang)
+   pub2.publish(t)
    print(math.fabs(err_ang))
-   if math.fabs(err_ang)>(math.pi/180):
+   if math.fabs(err_ang)>(math.pi/1800):
+     v.linear.x=0
      v.angular.z=10*err_ang+0.00001*ierr_ang+1000*derr_ang  
      pub.publish(v)
      rate.sleep()
@@ -50,12 +56,13 @@ def line_control():
      prev_err_ang=err_ang
      return 1
 def main():
-   global pub,rate,theta,dist,set_ang
+   global pub,rate,theta,dist,set_ang,pub2
    rospy.init_node('move_farthest',anonymous=True)
    pub=rospy.Publisher('/cmd_vel',Twist,queue_size=10)
    rate=rospy.Rate(1000)
    sub1=rospy.Subscriber('/ddr/laser/scan',LaserScan,laser_clbk)
    sub2=rospy.Subscriber('/odom',Odometry,odom_clbk)
+   pub2=rospy.Publisher('/ddr/errors',err,queue_size=10)
    v=Twist()
    v.angular.z=1
    old_time=time()
@@ -73,8 +80,7 @@ def main():
    while dist[-1]>0.4:
      state=line_control()
      if state==1:
-       v.angular.z=0
-       v.linear.x=0.5
+       v.linear.x=0.3
        pub.publish(v)
        rate.sleep()
      else:
