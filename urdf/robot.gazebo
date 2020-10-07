@@ -9,9 +9,11 @@ BASE_LINK OF THE ROBOT
   <visual>
     <origin xyz="0 0 0" rpy="0 0 0"/>
      <geometry>
-     <box size="0.5 0.5 0.175"/>
-     </geometry>                               
+     <mesh filename="package://DDR/meshes/chassis.dae" scale="1.25 1.25 1.0" />
+     
+    </geometry>                               
   </visual>
+  
   <collision>
     <origin xyz="0 0 0" rpy="0 0 0"/>
     <geometry>
@@ -96,11 +98,12 @@ RIGHT_WHEEL AS A CYLINDRICAL LINK
 -->
 <link name="right_wheel">
   <visual>
-     <origin xyz="0 0 0" rpy="1.570795 0 0"/>
+     <origin xyz="0 0 0" rpy="0 0 0"/>
      <geometry>
-        <cylinder length="0.05" radius="0.15"/>
+        <mesh filename="package://DDR/meshes/wheel.dae" scale="1.5 1.5 1.5"/>
+        <scale>1.0 2.0 1.0</scale>
      </geometry>
-     </visual>
+  </visual>
      <collision>
        <origin xyz="0 0 0" rpy="1.570795 0 0"/>
        <geometry>
@@ -130,10 +133,10 @@ LEFT_WHEEL AS A CYLINDRICAL LINK
 -->
 <link name="left_wheel">
   <visual>
-    <origin xyz="0 0 0" rpy="1.570795 0 0"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
     <geometry>
-      <cylinder length="0.05" radius="0.15"/>
-    </geometry>
+      <mesh filename="package://DDR/meshes/wheel.dae" scale="1.5 1.5 1.5" />
+      </geometry>
   </visual>
   <collision>
       <origin xyz="0 0 0" rpy="1.570795 0 0"/>
@@ -163,16 +166,13 @@ GAZEBO REFERENCE FOR LINKS
 
 -->
 <gazebo reference="base_link">
-  <material>Gazebo/Orange</material>
+  <material>Gazebo/Black</material>
 </gazebo>
-<gazebo reference="castor_link1">
-  <material>Gazebo/Orange</material>
-</gazebo>
-<gazebo reference="castor_link2">
-  <material>Gazebo/Orange</material>
+<gazebo reference="castor_link">
+  <material>Gazebo/White</material>
 </gazebo>
 <gazebo reference="sensor_link">
-  <material>Gazebo/Blue</material>
+  <material>Gazebo/Red</material>
 </gazebo>
 <gazebo reference="right_wheel">
   <material>Gazebo/White</material>
